@@ -4,11 +4,15 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oybek.hippo.queues.QueueController;
 import com.oybek.hippo.things.Message;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class VkPostman extends Postman {
+    private static final Logger logger = LoggerFactory.getLogger(VkPostman.class);
+
     @Value("${vk.token}")
     private String accessToken;
 
@@ -19,7 +23,7 @@ public class VkPostman extends Postman {
 
     private long lastMessageId = 0;
 
-    public VkPostman (QueueController queueController) {
+    public VkPostman(QueueController queueController) {
         this.queueController = queueController;
 
         new Thread(new Runnable() {
@@ -55,7 +59,7 @@ public class VkPostman extends Postman {
                             lastMessageId = Math.max(lastMessageId, msg.getId());
 
                             if (msg.getReadState() == 0) {
-                                System.out.println(msg.toString());
+                                logger.info("Got message: " + msg.toString());
                                 queueController.getQueueToHippo().add(msg);
                             }
                         }

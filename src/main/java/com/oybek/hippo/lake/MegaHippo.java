@@ -2,6 +2,8 @@ package com.oybek.hippo.lake;
 
 import com.oybek.hippo.queues.QueueController;
 import com.oybek.hippo.things.Message;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.UnsupportedEncodingException;
@@ -10,6 +12,8 @@ import java.util.HashMap;
 
 @Component
 public class MegaHippo {
+    private static final Logger logger = LoggerFactory.getLogger(MegaHippo.class);
+
     private QueueController queueController;
     private HashMap<Long, Hippo> hippos;
 
@@ -40,12 +44,16 @@ public class MegaHippo {
                 // ... get message from queue
                 Message msg = queueController.getQueueToHippo().poll();
 
+                logger.info("Got message: " + msg.toString());
+
                 hippos.putIfAbsent(msg.getUid(), new Hippo());
 
                 // get reaction of hippo to message
                 Message replyMsg = hippos.get(msg.getUid()).getReaction(msg);
 
                 if (replyMsg != null) {
+                    logger.info("send message: " + replyMsg.toString());
+
                     // url encode hippo's response
                     try {
                         replyMsg.setBody(URLEncoder.encode(replyMsg.getBody(), "UTF-8"));
