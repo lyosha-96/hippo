@@ -7,13 +7,18 @@ I think that these 3 operations are enough to write any bot logic.
 
 # Example
 ```javascript
+var hippo = Java.type('com.oybek.hippo.lake.MegaHippo');
+
 function sayhello(message) {
-  if (message.text == "hello") {
-    hippo.send("hello bro!");
-  }
+	if (message.body == "hello") {
+		message.body = "hello bro!";
+	} else {
+		message.body = "I only receive 'hello'";
+	}
+	hippo.send(message);
 }
 
 function think(message) {
-  sayhello(message);
+	sayhello(message);
 }
 ```
