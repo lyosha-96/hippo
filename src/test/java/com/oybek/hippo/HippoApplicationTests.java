@@ -11,6 +11,7 @@ public class HippoApplicationTests {
 
 	@Test
 	public void contextLoads() {
+		assert(1 == 1);
 	}
 
 }

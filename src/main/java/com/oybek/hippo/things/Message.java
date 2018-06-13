@@ -2,6 +2,7 @@ package com.oybek.hippo.things;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jdk.nashorn.api.scripting.ScriptObjectMirror;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Message {
@@ -20,7 +21,7 @@ public class Message {
     public void setId(long id) { this.id = id; }
 
     @JsonProperty("date")
-    public long getDate() { return id; }
+    public long getDate() { return date; }
 
     @JsonProperty("date")
     public void setDate(long date) { this.date = date; }
@@ -56,6 +57,26 @@ public class Message {
     public Message setAttachmentt(String attachment) {
         this.attachment = attachment;
         return this;
+    }
+
+    public static Message fromScriptObjectMirror(ScriptObjectMirror o) {
+        Message message = new Message();
+
+        message.setId(((Number) o.get("mid")).longValue());
+        message.setDate(((Number) o.get("date")).longValue());
+        message.setUid(((Number) o.get("uid")).longValue());
+        message.setReadState(((Number) o.get("read_state")).longValue());
+        message.setBody(o.get("body").toString());
+
+        if (o.hasMember("geo")) {
+            message.setGeo((Geo) o.get("geo"));
+        }
+
+        if (o.hasMember("attachment")) {
+            message.setAttachmentt( o.get("attachment").toString() );
+        }
+
+        return message;
     }
 
     @Override
