@@ -18,6 +18,7 @@ function sayhello(message) {
 	hippo.send(message);
 }
 
+// called when you receive new message
 function think(message) {
 	sayhello(message);
 }
