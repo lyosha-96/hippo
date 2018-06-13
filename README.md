@@ -9,7 +9,7 @@ I think that these 3 operations are enough to write any bot logic.
 ```javascript
 function sayhello(message) {
   if (message.text == "hello") {
-    send("hello bro!");
+    hippo.send("hello bro!");
   }
 }
 
